@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+
+<body>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+
+<br/>
+
+<h1>Admin</h1>
+
+<div>
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <tr>
+            <td><p th:text="${admin.id}">id</p></td>
+            <td><p th:text="${admin.name}">name</p></td>
+            <td><p th:text="${admin.age}">age</p></td>
+
+        </tr>
+    </table>
+
+    <table border="1">
+        <tr>
+            <th>Roles</th>
+        </tr>
+<!--        <tr>-->
+<!--            <td><p th:text="${admin.roles[0].role}"></p></td>-->
+<!--            <td><p th:text="${admin.roles[1].role}"></p></td>-->
+<!--        </tr>-->
+
+        <tr th:each="role : ${roles}">
+            <td><p th:text="${role.role}"></p></td>
+        </tr>
+    </table>
+
+</div>
+<br/>
+<a href="/admin/users"><input type="button" value="Get users"></a>
+
+<br/>
+<br/>
+<p th:text="${headerMessage}">headerMessage</p>
+</body>
+</html>

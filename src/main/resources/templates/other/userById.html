@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+
+<body>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+<br/>
+<h1>User by id for Admin</h1>
+
+
+
+<div>
+    <table border="1">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+            <td th:utext="${user.id}">id</td>
+            <td th:utext="${user.name}">name</td>
+
+            <td th:utext="${user.age}">age</td>
+<!--            <td><a th:href="@{/users/{id}/edit(id=${user.id})}">Edit</a></td>-->
+            <td><a th:href="@{/admin/users/{id}/edit(id=${user.id})}"><input type="button" value="Edit"></a></td>
+            <td>
+                <form method="post" th:action="@{/admin/users/{id}/delete (id=${user.id})}">
+                    <input type="submit" value="Delete"/></form>
+            </td>
+    </table>
+
+    <table border="1">
+        <tr>
+            <th>Roles</th>
+        </tr>
+        <tr th:each="role : ${roles}">
+            <td><p th:text="${role.role}"></p></td>
+        </tr>
+    </table>
+</div>
+
+<br/>
+
+<a href="/admin/users"><input type="button" value="Get users"></a>
+
+<br/>
+<p th:text="${headerMessage}">headerMessage</p>
+</body>
+</html>

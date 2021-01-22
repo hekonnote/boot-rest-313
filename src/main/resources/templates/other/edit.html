@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit user</title>
+</head>
+
+<body>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
+<br/>
+<h1>Edit user</h1>
+
+<form method="post" th:action="@{/admin/users/{id} (id=${user.id})}" th:object="${user}">
+    <label for="name"> Enter name: </label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+
+    <label for="age"> Enter age: </label>
+    <input type="text" th:field="*{age}" id="age"/>
+    <br/>
+
+    <label for="password"> Enter password: </label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <br/>
+    <br/>
+    <input type="submit" value="Update"/>
+
+    <label>Enter roles:
+
+        <!-- через чек-бокс: -->
+        <!--        <input type="checkbox" name="rolesNames"-->
+        <!--               th:each="role : ${rolesNames}"-->
+        <!--               th:text="${role.role}"-->
+        <!--               th:value="${role.role}"-->
+        <!--        />-->
+
+        <!-- через мультиселект: -->
+        <!--            <select multiple size="2" name="rolesNames" >-->
+        <!--                <option value="ROLE_ADMIN">ROLE_ADMIN</option>-->
+        <!--                <option selected="selected" value="ROLE_USER">ROLE_USER</option>-->
+        <!--            </select>-->
+
+        <select multiple size="2" name="rolesNames">
+            <option value=""> - Select role - </option>
+            <option
+                    th:each="role : ${rolesNames}"
+                    th:value="${role.role}"
+                    th:text="${role.role}">
+            </option>
+        </select>
+
+    </label>
+</form>
+
+<br/>
+<p th:text="${headerMessage}">headerMessage</p>
+</body>
+</html>
