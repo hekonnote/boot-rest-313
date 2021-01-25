@@ -82,12 +82,11 @@ $(document).ready(function () {
             `;
         }
         $("#roles").append(options_html);
-
     });
 
-    // будет работать, если создана форма товара
+    // будет работать, если создана форма для создания нового юзера
     $(document).on('submit', '#add-new-user-form', function(){
-        // получение данных формы
+        // получение данных из формы
         var form_data=JSON.stringify($(this).serializeObject());
 
         // отправка данных формы в API
@@ -98,14 +97,16 @@ $(document).ready(function () {
             data : form_data,
             success : function(result) {
                 // продукт был создан, вернуться к списку продуктов
-                readUsers();
+                showAdminPanel();
+                readUsers()
+                $("#myTabContent").append(newUserTab_html);
+                $("#roles").append(options_html);
             },
             error: function(xhr, resp, text) {
                 // вывести ошибку в консоль
                 console.log(xhr, resp, text);
             }
         });
-
         return false;
     });
 
