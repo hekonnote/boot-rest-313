@@ -29,8 +29,7 @@ public class UserServiceImp implements UserService {
     public void add(User user) {
         if (userDao.getByName(user.getName()) == null) {
             userDao.add(user);
-        }
-        System.out.println("Duplicate name");
+        } else System.out.println("Duplicate name");
     }
 
     @Transactional

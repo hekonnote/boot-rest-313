@@ -1,8 +1,13 @@
 $(document).ready(function () {
 
+    insertNewUserTab_html();
+
+});
+
+function insertNewUserTab_html() {
+
     let newUserTab_html = `
-                <!--Содержимое вкладки New user начало-->
-                    <!-- содержимое пока убрал    -->
+                <!-- HTML вкладки New user начало-->
                 <div class="tab-pane fade" id="new" role="tabpanel" aria-labelledby="new-tab">
                     <h5 class="d-flex ml-3 mt-1">Add new user</h5>
                     <div class="container-fluid bg-white px-5 py-3 vh-100 text-center">
@@ -11,7 +16,7 @@ $(document).ready(function () {
                             <div class="col-sm-3"></div>
                             <div class="col-sm-6">
                 
-                                <form action="/admin/users" method="post" id="add-new-user-form">
+                                <form id="add-new-user-form">
                 
                                     <div class="form-group">
                                         <label class="font-weight-bold" for="name">Name</label>
@@ -41,7 +46,6 @@ $(document).ready(function () {
                                                id="password"
                                                placeholder="Password"
                                                required>
-                
                                     </div>
                 
                                     <div class="form-group">
@@ -50,65 +54,126 @@ $(document).ready(function () {
                                                 name="rolesNames" required>
                                         </select>
                                     </div>
-                
-<!--                                    <div class="form-group">-->
-<!--                                        <input type="submit" class="btn btn-success" value="Add new user">-->
-<!--         <span class='glyphicon glyphicon-plus'></span>                           </div>-->
 
                                     <div class="form-group">
-                                        <button type='submit' class='btn btn-success'>Add new user</button>
+                                        <button id='button-create-user' class='btn btn-success'>Add new user</button>
                                     </div>
                                     
                                 </form>
+                                
+                                    
+<!--                                        <button id='button-create-user' class='btn btn-success'>Add new user</button>-->
+                                
                             </div>
                             <div class="col-sm-3"></div>
                         </div>
                     </div>
                 
                 </div>
-                <!--Содержимое вкладки New user конец-->
+                <!--HTML вкладки New user конец-->
 `;
+    // Добавляем HTML вкладки New user в Базовый HTML
     $("#myTabContent").append(newUserTab_html);
 
-    //переменная для хранения ролей
-    let options_html = null;
+    getRolesList();
 
-    //создаем возможность выбора ролей в цикле: <option>ROLE_USER</option> через js-код
-    //                                          <option>ROLE_ADMIN</option> через js-код
-    $.getJSON("/api/users/new", function (blankUser) {
-        for (let i = 0; i < blankUser.roles.length; i++) {
-            options_html += `
-            <option>${blankUser.roles[i].role}</option>
-            `;
+    //  Получение данных формы ============================== начало
+    const submit = document.getElementById("button-create-user");
+
+    // Генерим userData для последующего преобразования ее в json
+    const getUserDataFromForm = () => {
+        const form = document.getElementById("add-new-user-form");
+
+        const {name, age, password, roles} = form;
+
+        let rolesArr = [];
+
+        for (let i = 0; i < roles.length; i++) {
+            if (roles[i].selected) {
+                rolesArr.push(roles[i].value);
+            }
         }
-        $("#roles").append(options_html);
-    });
 
-    // будет работать, если создана форма для создания нового юзера
-    $(document).on('submit', '#add-new-user-form', function(){
-        // получение данных из формы
-        var form_data=JSON.stringify($(this).serializeObject());
+        let userData = {
+            name: name.value,
+            age: age.value,
+            password: password.value,
+            rolesNames: rolesArr
+        };
+
+        return userData;
+    };
+
+    const toJson = function (event) {
+        const user = getUserDataFromForm();
+
+        event.preventDefault();
+
+        let json = JSON.stringify(user);
+
+        console.log(json);
 
         // отправка данных формы в API
         $.ajax({
             url: "/api/admin/users",
-            type : "POST",
-            contentType : 'application/json',
-            data : form_data,
-            success : function(result) {
-                // продукт был создан, вернуться к списку продуктов
+            type: "POST",
+            contentType: 'application/json',
+            data: json,
+            success: function (result) {
+                // юзер был создан, вернуться к списку юзеров
                 showAdminPanel();
-                readUsers()
-                $("#myTabContent").append(newUserTab_html);
-                $("#roles").append(options_html);
+                insertNewUserTab_html();
             },
-            error: function(xhr, resp, text) {
+            error: function (xhr, resp, text) {
                 // вывести ошибку в консоль
                 console.log(xhr, resp, text);
             }
         });
-        return false;
+    };
+//  Получение данных формы ============================== конец
+    submit.addEventListener('click', toJson);
+};
+
+// Получение списка ролей и добавление их в форму для нового юзера ================ начало
+function getRolesList() {
+
+    let options_html = '';
+
+    $.getJSON("/api/users/new", function (blankUser) {
+        console.log('Add rolesList to New user form ============ ');
+        for (let i = 0; i < blankUser.roles.length; i++) {
+            options_html += `<option>${blankUser.roles[i].role}</option>`;
+        }
+        console.log(options_html);
+        $("#roles").append(options_html);
     });
+}
 
-});
+// Получение списка ролей и добавление их в форму для нового юзера ================ конец
 
+// будет работать, если создана форма для создания нового юзера
+// $(document).on('click', '#button-create-user', function(){
+// получение данных из формы
+// let form_data=JSON.stringify($(this).serializeObject());
+// let form_data=JSON.stringify(Object.fromEntries(formData.entries()));
+
+// отправка данных формы в API
+// $.ajax({
+//     url: "/api/admin/users",
+//     type : "POST",
+//     contentType : 'application/json',
+//     data : form_data,
+//     success : function(result) {
+//         // юзер был создан, вернуться к списку юзеров
+//         showAdminPanel();
+//         readUsers()
+//         $("#myTabContent").append(newUserTab_html);
+//         $("#roles").append(options_html);
+//     },
+//     error: function(xhr, resp, text) {
+//         // вывести ошибку в консоль
+//         console.log(xhr, resp, text);
+//     }
+// });
+//     return false;
+// });

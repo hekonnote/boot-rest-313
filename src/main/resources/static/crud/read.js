@@ -1,81 +1,22 @@
 // jQuery(function ($) {
 $(document).ready(function () {
 
-    // Служебная строка
     console.log('Start read.js =============')
 
     showAdminPanel();
-
-    readUsers();
 
     // Ручной вызов функции readUsers() с помощью нажатия кнопки
     $(document).on('click', '.read-users-button', function () {
         readUsers();
     });
+
+
 });
 
-// function showAdminPanel() выводит страницу Admin panel НАЧАЛО
+//============================================================================
+
+// Функция showAdminPanel() выводит страницу Admin panel со всеми Users (НАЧАЛО)
 function showAdminPanel() {
-
-// // html for listing Users
-//         let read_users_html = `
-//     <!-- при нажатии загружается форма создания нового юзера -->
-//     <div id='create-user' class='btn btn-primary pull-right m-b-15px create-user-button'>
-//         <span class='glyphicon glyphicon-plus'></span> New user
-//     </div>
-//
-//             <!-- начало таблицы -->
-//         <table class='table table-bordered table-hover'>
-//
-//             <!-- создание заголовков таблицы -->
-//         <tr>
-//         <th class='w-15-pct'>Name</th>
-//             <th class='w-10-pct'>Age</th>
-//             <th class='w-15-pct'>Roles</th>
-//             <th class='w-25-pct text-align-center'>Actions</th>
-//             </tr>`;
-//
-//         // здесь будут строки
-//         // перебор списка возвращаемых данных
-//         $.each(data, function (key, val) {
-//
-//             // создание новой строки таблицы для каждой записи
-//             read_users_html += `
-//         <tr>
-//
-//             <td>` + val.name + `</td>
-//             <td>` + val.age + `</td>
-//             <td>` + val.roles + `</td>
-//
-//             <!-- кнопки 'действий' -->
-//             <td>
-//                 <!-- кнопка чтения товара -->
-//                 <button class='btn btn-primary m-r-10px read-one-user-button' data-id='` + val.id + `'>
-//                     <span class='glyphicon glyphicon-eye-open'></span> Просмотр
-//                 </button>
-//
-//                 <!-- кнопка редактирования -->
-//                 <button class='btn btn-info m-r-10px update-user-button' data-id='` + val.id + `'>
-//                     <span class='glyphicon glyphicon-edit'></span> Edit
-//                 </button>
-//
-//                 <!-- кнопка удаления товара -->
-//                 <button class='btn btn-danger delete-user-button' data-id='` + val.id + `'>
-//                     <span class='glyphicon glyphicon-remove'></span> Delete
-//                 </button>
-//             </td>
-//
-//         </tr>`;
-//         });
-//
-//         // конец таблицы
-//         read_users_html += `</table>`;
-//
-//         // вставка в 'page-content' нашего приложения
-//         $("#page-content").html(read_users_html);
-
-
-    //===================================================================================================
 
     let admin_panel_html = `
 <!--container for the whole page excluding navbar start-->
@@ -164,17 +105,20 @@ function showAdminPanel() {
         `;
 
     $("#page-content").html(admin_panel_html);
+
+    readUsers();
 }
-// function showAdminPanel() выводит страницу Admin panel КОНЕЦ
+// Функция showAdminPanel() выводит страницу Admin panel со всеми Users (КОНЕЦ)
 
-// Эта функция считывает список юзеров и заполняет таблицу Users (начало)
+//============================================================================
+
+// Функция readUsers() считывает список юзеров из БД и заполняет таблицу Users (начало)
 function readUsers() {
-
     let users_html;
 
     // получить список Users из api НАЧАЛО
     $.getJSON("/api/admin/users", function (data) {
-        // перебор списка возвращаемых данных :
+        // перебор списка возвращаемых данных:
         // на каждой итерации сначала достаем роли текущего юзера (юзера этой итерации), парсим их, кладем в массив,
         // для красивого вывода джойним массив в список (rollerList), после формируем строку со всеми данными юзера;
         // каждая итерация формирует следующую строку со следующим юзером
@@ -222,4 +166,4 @@ function readUsers() {
     });
     // получить список Users из api КОНЕЦ
 }
-// Эта функция считывает список юзеров и заполняет таблицу Users (конец)
+// Функция readUsers() считывает список юзеров из БД и заполняет таблицу Users (конец)
