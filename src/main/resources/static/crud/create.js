@@ -22,16 +22,14 @@ function insertNewUserTab_html() {
                                         <label class="font-weight-bold" for="name">Name</label>
                                         <input type="text"
                                                name="name"
-                                               class="form-control bg-warning"
+                                               class="form-control bg-warning required"
                                                id="name"
-                                               placeholder="Name"
-                                               required>
+                                               placeholder="Name">
                                     </div>
                 
                                     <div class="form-group">
-                                        <label class="font-weight-bold" for="age">Age</label>
-                                        <input required
-                                               type="text"
+                                        <label class="font-weight-bold required" for="age">Age</label>
+                                        <input type="text"
                                                name="age"
                                                class="form-control bg-warning"
                                                id="age"
@@ -41,17 +39,16 @@ function insertNewUserTab_html() {
                                     <div class="form-group">
                                         <label class="font-weight-bold" for="password">Password</label>
                                         <input type="password"
-                                               class="form-control"
+                                               class="form-control required"
                                                name="password"
                                                id="password"
-                                               placeholder="Password"
-                                               required>
+                                               placeholder="Password">
                                     </div>
                 
                                     <div class="form-group">
                                         <label class="font-weight-bold" for="roles">Roles</label>
-                                        <select multiple size="2" class="form-control" id="roles"
-                                                name="rolesNames" required>
+                                        <select multiple size="2" class="form-control required" id="roles"
+                                                name="rolesNames">
                                         </select>
                                     </div>
 
@@ -61,9 +58,6 @@ function insertNewUserTab_html() {
                                     
                                 </form>
                                 
-                                    
-<!--                                        <button id='button-create-user' class='btn btn-success'>Add new user</button>-->
-                                
                             </div>
                             <div class="col-sm-3"></div>
                         </div>
@@ -72,15 +66,17 @@ function insertNewUserTab_html() {
                 </div>
                 <!--HTML вкладки New user конец-->
 `;
+
     // Добавляем HTML вкладки New user в Базовый HTML
     $("#myTabContent").append(newUserTab_html);
 
     getRolesList();
 
-    //  Получение данных формы ============================== начало
-    const submit = document.getElementById("button-create-user");
 
-    // Генерим userData для последующего преобразования ее в json
+    //  Получение данных формы ============================== начало
+    const createUserButton = document.getElementById("button-create-user");
+
+    // Генерим userData из формы для последующего преобразования в json
     const getUserDataFromForm = () => {
         const form = document.getElementById("add-new-user-form");
 
@@ -105,12 +101,11 @@ function insertNewUserTab_html() {
     };
 
     const toJson = function (event) {
-        const user = getUserDataFromForm();
-
         event.preventDefault();
 
-        let json = JSON.stringify(user);
+        const user = getUserDataFromForm();
 
+        let json = JSON.stringify(user);
         console.log(json);
 
         // отправка данных формы в API
@@ -131,7 +126,7 @@ function insertNewUserTab_html() {
         });
     };
 //  Получение данных формы ============================== конец
-    submit.addEventListener('click', toJson);
+    createUserButton.addEventListener('click', toJson);
 };
 
 // Получение списка ролей и добавление их в форму для нового юзера ================ начало
@@ -146,34 +141,30 @@ function getRolesList() {
         }
         console.log(options_html);
         $("#roles").append(options_html);
+        // $("#roles").prop("required", true);
+
     });
 }
-
 // Получение списка ролей и добавление их в форму для нового юзера ================ конец
 
-// будет работать, если создана форма для создания нового юзера
-// $(document).on('click', '#button-create-user', function(){
-// получение данных из формы
-// let form_data=JSON.stringify($(this).serializeObject());
-// let form_data=JSON.stringify(Object.fromEntries(formData.entries()));
 
-// отправка данных формы в API
-// $.ajax({
-//     url: "/api/admin/users",
-//     type : "POST",
-//     contentType : 'application/json',
-//     data : form_data,
-//     success : function(result) {
-//         // юзер был создан, вернуться к списку юзеров
-//         showAdminPanel();
-//         readUsers()
-//         $("#myTabContent").append(newUserTab_html);
-//         $("#roles").append(options_html);
-//     },
-//     error: function(xhr, resp, text) {
-//         // вывести ошибку в консоль
-//         console.log(xhr, resp, text);
-//     }
+
+// $(document).ready(function() {
+//     $('#add-new-user-form').validate({
+//         rules: {
+//             name: "required",
+//             age: "required",
+//             password: "required",
+//             rolesNames: "required"
+//         },
+//         messages: {
+//             name: "Введите имя!",
+//             age: "Введите возраст!",
+//             password: "Введите пароль!",
+//             rolesNames: "Выберите роль!"
+//         },
+//         // focusInvalid: true,
+//         // errorClass: "input_error"
+//     });
 // });
-//     return false;
-// });
+

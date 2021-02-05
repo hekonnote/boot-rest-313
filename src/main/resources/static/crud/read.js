@@ -2,30 +2,26 @@
 $(document).ready(function () {
 
     console.log('Start read.js =============')
-
     showAdminPanel();
 
-    // Ручной вызов функции readUsers() с помощью нажатия кнопки
-    $(document).on('click', '.read-users-button', function () {
-        readUsers();
-    });
-
-
+    // Ручной вызов функции readUsers() с помощью нажатия кнопки Users (полезна на стадии отладки) / потом можно удалить
+    // $(document).on('click', '.read-users-button', function () {
+    //     readUsers();
+    // });
 });
 
 //============================================================================
 
 // Функция showAdminPanel() выводит страницу Admin panel со всеми Users (НАЧАЛО)
 function showAdminPanel() {
-
     let admin_panel_html = `
 <!--container for the whole page excluding navbar start-->
 <div class="container-fluid">
 
-    <!-- кнопка для показа всех Users ================= потом удалить -->
-    <div id='read-users' class='btn btn-primary pull-right m-b-15px read-users-button'>
-        <span class='glyphicon glyphicon-list'></span> Users
-    </div>
+    <!-- кнопка для показа всех Users (полезна на стадии отладки) ================= потом можно удалить -->
+<!--    <div id='read-users' class='btn btn-primary pull-right m-b-15px read-users-button'>-->
+<!--        <span class='glyphicon glyphicon-list'></span> Users-->
+<!--    </div>-->
 
     <!--row for both panels (left/right) start-->
     <div class="row">
@@ -108,6 +104,7 @@ function showAdminPanel() {
 
     readUsers();
 }
+
 // Функция showAdminPanel() выводит страницу Admin panel со всеми Users (КОНЕЦ)
 
 //============================================================================
@@ -132,7 +129,7 @@ function readUsers() {
             // создание новой строки таблицы для каждой записи (для каждого юзера)
             users_html += `
                         <tr>
-                            <td>${user.id}</td>
+                            <td data-id>${user.id}</td>
                             <td>${user.name}</td>
                             <td>${user.age}</td>
                             <td>
@@ -142,27 +139,27 @@ function readUsers() {
                             </td>
 
                             <td>
-                                <button class="btn btn-info edit-btn" data-toggle="modal"
-                                        th:data-target="${'#Edit' + user.id}">Edit
+                                <button class="btn btn-info edit-btn" 
+                                        data-toggle="modal"
+                                        data-target="#modal-edit">Edit
                                 </button>
                             </td>
 
                             <td>
-                                <button th:data-target="${'#Delete' + user.id}"
+                                <button class="btn btn-danger delete-btn"
                                         data-toggle="modal"
-                                        class="btn btn-danger">Delete
+                                        data-target="#modal-delete">Delete
                                 </button>
                             </td>
 
 <!--Код модалок является частью кода таблицы и строки (tr),
 в которой расположены кнопки Edit/Delete (которые вызывают модалки при нажатии на них) 
-Код модалок пока убрал!!! перенес его в ворд -->
+Код модалок пока убрал! Он будет добавлен соответствующими скриптами. -->
 
                         </tr>`
         });
 
         $("#users-filling").html(users_html);
-
     });
     // получить список Users из api КОНЕЦ
 }

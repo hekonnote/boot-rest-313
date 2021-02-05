@@ -94,16 +94,15 @@ public class RestController {
 
     @PutMapping("/admin/users/{userId}")
     public ResponseEntity<User> update(@PathVariable("userId") Long id,
-                                       @RequestBody User user) {
+                                       @RequestBody UserDto userDto) {
         Set<Role> rolesSet = new HashSet<>();
-        for (Role roleName : user.getRoles()) {
-            rolesSet.add(roleService.getByName(roleName.getRole()));
+        for (String roleName : userDto.getRolesNames()) {
+            rolesSet.add(roleService.getByName(roleName));
         }//@RequestParam(value = "userRoles") String[] roles
+        User user = new User(userDto);
         user.setRoles(rolesSet);
-
         userService.update(id, user);
         User updatedUser = userService.getById(id);
-
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
